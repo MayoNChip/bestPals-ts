@@ -1,0 +1,62 @@
+import { userService } from "../user/user.service";
+import { authService } from "./auth.service";
+import { TypedRequestHandler } from "../../utils/zodValidation";
+import { LoginSchema, RegisterSchema } from "./auth.schema";
+
+const login: TypedRequestHandler<{ body: LoginSchema }> = async (
+  req,
+  res,
+  next
+) => {
+  const { email, password } = req.body;
+  try {
+    const userRes = await userService.findByEmail(email);
+    console.log("logging in", userRes);
+    if (!userRes) {
+      return next("User not found");
+    }
+    const valid = authService.validateLogin(password, userRes?.password);
+    console.log("valid", valid);
+    if (!valid) {
+      return next("Password is not correct");
+    }
+    const userId = userRes._id;
+    const ACCESS_TOKEN = authService.generateAccessToken(userId.toString());
+    res.send(ACCESS_TOKEN);
+  } catch (error) {
+    if (error instanceof Error) {
+      next(error.message);
+    }
+  }
+  //   const user = userRes[0];
+};
+
+const register: TypedRequestHandler<{ body: RegisterSchema }> = async (
+  req,
+  res,
+  next
+) => {
+  const usersList = await userService.getAll();
+  const hashedPassword = authService.generateHash(req.body.password);
+  const user = { ...req.body, password: hashedPassword };
+  const { repassword, ...userWithoutRepassword } = user;
+  //   delete user.repassword;
+
+  if (!usersList) {
+    return next("failed to get users list");
+  }
+  if (usersList.find((i) => i.email === user.email)) {
+    return next("User with this email already exists");
+  }
+  user;
+  const newUser = await userService.createNewUser(userWithoutRepassword);
+  const ACCESS_TOKEN = authService.generateAccessToken(newUser._id.toString());
+
+  res.send({
+    success: true,
+    userId: newUser._id,
+    ACCESS_TOKEN,
+  });
+};
+
+export const authController = { login, register };
