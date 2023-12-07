@@ -1,6 +1,8 @@
 backend/node_modules
 backend/.env
 frontend/.env
+backend/*.js
+/*.js
 frontend/node_modules
 frontend/pnpm-lock.yaml
 backend/pnpm-lock.yaml
