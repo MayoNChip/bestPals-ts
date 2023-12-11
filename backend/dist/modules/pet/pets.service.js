@@ -101,15 +101,15 @@ const update = (id, body) => __awaiter(void 0, void 0, void 0, function* () {
 //     return err;
 //   }
 // };
-// const findByFilter = async (query, sorting) => {
-//   const test = { petType: { $eq: "dog" } };
-//   const sort = { weight: -1 };
-//   const getPetByFilter = await PetsDB.find(query).sort(sorting.sorting);
-//   if (getPetByFilter.length === 0) {
-//     return { success: false, message: "No pets found by this filter" };
-//   }
-//   return { success: true, message: getPetByFilter };
-// };
+const findByFilter = (query, sorting) => __awaiter(void 0, void 0, void 0, function* () {
+    const test = { petType: { $eq: "dog" } };
+    const sort = { weight: -1 };
+    const getPetByFilter = yield pets_model_1.default.find(query).sort(sorting);
+    if (getPetByFilter.length === 0) {
+        return { success: false, message: "No pets found by this filter" };
+    }
+    return { success: true, message: getPetByFilter };
+});
 exports.petService = {
     getAll,
     addPet,
@@ -120,5 +120,5 @@ exports.petService = {
     // findByEmail,
     // deletePet,
     // getPetsByUser,
-    // findByFilter,
+    findByFilter,
 };

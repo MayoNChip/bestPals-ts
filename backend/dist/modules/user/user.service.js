@@ -43,6 +43,7 @@ const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log("get by id", id);
         const user = yield user_model_1.default.findOne({ _id: id });
         console.log("get by id", user);
         return user;
@@ -91,7 +92,6 @@ const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
 const findByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_model_1.default.findOne({ email });
-        console.log("user from find by email", user);
         return user === null || user === void 0 ? void 0 : user.toObject();
     }
     catch (err) {

@@ -20,17 +20,17 @@ petsRouter.post("/", validateReq(PetSchema), petsController.addPet);
 // );
 
 petsRouter.put(
-  "/:petId",
-  validateReq(PetSchema),
-  //  authValidate.authValidate,
-  petsController.updatePet
+	"/:petId",
+	validateReq(PetSchema),
+	//  authValidate.authValidate,
+	petsController.updatePet
 );
 // petsRouter.delete(
 //   "/:petId",
 //   // authValidate.authValidate,
 //   petsController.deletePet
 // );
-// petsRouter.post("/search", petsController.getPetsByFilter);
+petsRouter.post("/search", petsController.getPetsByFilter);
 
 // petsRouter.patch("/:petId", authValidate.authValidate, (req, res) => {
 //   const data = req.body;

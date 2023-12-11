@@ -15,6 +15,7 @@ import Navbar from "./components/Navbar";
 import Homepage from "./components/Homepage";
 import SecuredRoutes from "./hooks/SecuredRoutes";
 import Mypets from "./components/Mypets";
+import Search from "./components/Search";
 // import AddPet from "./components/admin/AddPet";
 // import Pet from "./components/Pet";
 // import ModalUser from "./components/admin/ModalUser";
@@ -138,6 +139,15 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Homepage />} />
 					<Route path="/home" element={<Homepage />} />
+					<Route
+						path="/mypets"
+						element={
+							// <SecuredRoutes>
+							<Mypets />
+							// </SecuredRoutes>
+						}
+					/>
+					<Route path="/search" element={<Search />} />
 				</Routes>
 			</Flex>
 		</Flex>

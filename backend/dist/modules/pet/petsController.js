@@ -112,35 +112,36 @@ const updatePet = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 //   petService.deletePet(petId);
 //   res.send(`Pet ${petId} Deleted`);
 // };
-// // const getPetsByFilter:Handler = async (req, res) => {
-// // 	const body = req.body;
-// // 	const fullQuery = {};
-// // 	let sorting = {};
-// // 	for (var query in body) {
-// // 		if (!body[query].value) {
-// // 			delete body[query];
-// // 		}
-// // 	}
-// // 	const getSort = (key: string) => {
-// // 		return key === "weight" ? { weight: -1 } : { height: -1 };
-// // 	};
-// // 	body.map((query : any) => {
-// // 		switch (query.operator) {
-// // 			case "eq":
-// // 				fullQuery[query.key] = { $eq: query.value };
-// // 				break;
-// // 			case "regex":
-// // 				fullQuery[query.key] = { $regex: query.value, $options: "i" };
-// // 				break;
-// // 			case "sort":
-// // 				sorting = { sorting: getSort(query.key) };
-// // 				break;
-// // 		}
-// // 	});
-// // 	// const sortedQuery = { ...fullQuery, ...sorting };
-// // 	const findRes = await petService.findByFilter(fullQuery, sorting);
-// // 	res.send(findRes);
-// // };
+const getPetsByFilter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const body = req.body;
+    console.log(body);
+    const fullQuery = {};
+    let sorting = {};
+    for (let query in body) {
+        if (!body[query].value) {
+            delete body[query];
+        }
+    }
+    const getSort = (key) => {
+        return key === "weight" ? { weight: -1 } : { height: -1 };
+    };
+    body.map((query) => {
+        switch (query.operator) {
+            case "eq":
+                fullQuery[query.key] = { $eq: query.value };
+                break;
+            case "regex":
+                fullQuery[query.key] = { $regex: query.value, $options: "i" };
+                break;
+            case "sort":
+                sorting = { sorting: getSort(query.key) };
+                break;
+        }
+    });
+    // const sortedQuery = { ...fullQuery, ...sorting };
+    const findRes = yield pets_service_1.petService.findByFilter(fullQuery, sorting);
+    res.send(findRes);
+});
 exports.petsController = {
     getPets,
     getById,
@@ -152,5 +153,5 @@ exports.petsController = {
     // updatePetStatus,
     // updateCol,
     // getReqPet,
-    // getPetsByFilter,
+    getPetsByFilter,
 };

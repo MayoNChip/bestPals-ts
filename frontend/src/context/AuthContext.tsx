@@ -14,7 +14,6 @@ import { Pet } from "./PetContext";
 import useAuth from "../hooks/useAuth";
 import localforage from "localforage";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 // import user from "../../../full-stack-pet-adoption-mayonchip-backend/models/user";
 // import PetContext, { Pet } from "./PetContext";
 

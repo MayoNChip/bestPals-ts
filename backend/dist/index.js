@@ -19,13 +19,13 @@ if (!MONGO_URI) {
 }
 const app = (0, express_1.default)();
 const port = process.env.PORT;
-app.use((0, cors_1.default)({ origin: "http://localhost:3000" }));
+// app.use(cors({ origin: "http://localhost:3000" }));
 // app.use("/pets", petsRouter);
 app.use(express_1.default.json({ limit: "50mb" }));
 app.use((0, cors_1.default)({
     origin: [
         "https://full-stack-pet-adoption-mayo-n-chip.vercel.app",
-        "http://localhost:3000",
+        "http://localhost:5173",
     ],
 }));
 mongoose_1.default
@@ -41,7 +41,7 @@ app.get("/", (req, res) => {
 });
 app.use("/upload", upload_router_1.default);
 app.use("/auth", auth_router_1.default);
-app.use("/user", user_router_1.userRouter);
+app.use("/users", user_router_1.userRouter);
 app.use("/pets", pets_route_1.default);
 app.use((err, req, res, next) => {
     res.status(500).send({ success: false, message: err });

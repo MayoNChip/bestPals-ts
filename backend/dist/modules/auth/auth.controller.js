@@ -27,17 +27,14 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     const { email, password } = req.body;
     try {
         const userRes = yield user_service_1.userService.findByEmail(email);
-        console.log("logging in", userRes);
         if (!userRes) {
             return next("User not found");
         }
         const valid = auth_service_1.authService.validateLogin(password, userRes === null || userRes === void 0 ? void 0 : userRes.password);
-        console.log("valid", valid);
         if (!valid) {
             return next("Password is not correct");
         }
-        const userId = userRes._id;
-        const ACCESS_TOKEN = auth_service_1.authService.generateAccessToken(userId.toString());
+        const ACCESS_TOKEN = auth_service_1.authService.generateAccessToken(userRes._id);
         res.send(ACCESS_TOKEN);
     }
     catch (error) {
@@ -61,7 +58,7 @@ const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     }
     user;
     const newUser = yield user_service_1.userService.createNewUser(userWithoutRepassword);
-    const ACCESS_TOKEN = auth_service_1.authService.generateAccessToken(newUser._id.toString());
+    const ACCESS_TOKEN = auth_service_1.authService.generateAccessToken(newUser._id);
     res.send({
         success: true,
         userId: newUser._id,

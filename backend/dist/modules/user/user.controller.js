@@ -32,6 +32,7 @@ const getById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const getMe = (req, res) => {
     const user = req.user;
     user === null || user === void 0 ? true : delete user.password;
+    console.log(user, "this is user");
     res.send(user);
 };
 const addNew = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

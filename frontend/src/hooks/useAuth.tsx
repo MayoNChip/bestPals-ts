@@ -3,11 +3,12 @@ import { useContext } from "react";
 import localforage from "localforage";
 import CustomToast from "../utils/CustomToast";
 import AuthContext from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 // import { NavigateFunction, useNavigate } from "react-router-dom";
 
 export default function useAuth() {
 	// navigate: NavigateFunction
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const {
 		setLoggedIn,
 		setIsOwnedByUser,
@@ -26,7 +27,7 @@ export default function useAuth() {
 			fostered: false,
 			adopted: false,
 		});
-		// navigate("/home");
+		navigate("/home");
 	};
 
 	const userRegister = async (values: any, actions: any, onClose: any) => {
@@ -43,7 +44,7 @@ export default function useAuth() {
 			setLoggedIn(true);
 			await localforage.setItem("ACCESS_TOKEN", response.data.ACCESS_TOKEN);
 
-			// navigate("/");
+			navigate("/");
 			onClose();
 		} catch (err: any) {
 			console.log("user register error ==> ", err.response.data.message);
@@ -65,7 +66,7 @@ export default function useAuth() {
 			successToast("Success.", "Logged in successfully.");
 			setLoggedIn(true);
 			onClose();
-			// navigate("/home");
+			navigate("/home");
 		} catch (err: any) {
 			console.log("ERROR ==> ", err.response.data.message);
 			const errorMessage = err.response.data.message;

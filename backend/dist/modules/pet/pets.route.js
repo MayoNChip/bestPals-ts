@@ -26,7 +26,7 @@ petsController_1.petsController.updatePet);
 //   // authValidate.authValidate,
 //   petsController.deletePet
 // );
-// petsRouter.post("/search", petsController.getPetsByFilter);
+petsRouter.post("/search", petsController_1.petsController.getPetsByFilter);
 // petsRouter.patch("/:petId", authValidate.authValidate, (req, res) => {
 //   const data = req.body;
 //   const petId = new ObjectId(req.params.petId);

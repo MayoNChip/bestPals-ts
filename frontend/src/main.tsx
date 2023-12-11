@@ -9,16 +9,15 @@ import { PetProvider } from "./context/PetContext";
 import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <AuthProvider>
-      <PetProvider>
-        <ChakraProvider theme={theme}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-          ,
-        </ChakraProvider>
-      </PetProvider>
-    </AuthProvider>
-  </React.StrictMode>
+	<React.StrictMode>
+		<BrowserRouter>
+			<AuthProvider>
+				<PetProvider>
+					<ChakraProvider theme={theme}>
+						<App />,
+					</ChakraProvider>
+				</PetProvider>
+			</AuthProvider>
+		</BrowserRouter>
+	</React.StrictMode>
 );

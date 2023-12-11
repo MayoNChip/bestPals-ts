@@ -10,6 +10,7 @@ const generateJWT = (userId) => {
     const second = Math.floor(Date.now() / 1000);
     const week = second + 60 * 60 * 24 * 7;
     const ACCESS_TOKEN = jsonwebtoken_1.default.sign({ userId, exp: week }, secret);
+    console.log("ACCESS_TOKEN", ACCESS_TOKEN);
     return ACCESS_TOKEN;
 };
 exports.generateJWT = generateJWT;
