@@ -13,7 +13,7 @@ import { Pet } from "../context/PetContext";
 
 type Props = Pet;
 
-function PetCard({ id, name, age, breed, image, type, breed2 }: Props) {
+function PetCard({ _id, name, age, breed, image, type, breed2 }: Props) {
   return (
     <Flex
       w="300px"
@@ -99,7 +99,7 @@ function PetCard({ id, name, age, breed, image, type, breed2 }: Props) {
         variant="outline"
         colorScheme="cyan"
       >
-        <NavLink to={`/pet/${id}`}>More Info</NavLink>
+        <NavLink to={`/pet/${_id}`}>More Info</NavLink>
       </Link>
     </Flex>
   );

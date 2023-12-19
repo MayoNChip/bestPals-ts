@@ -12,7 +12,7 @@ function PetList() {
     <Flex wrap="wrap">
       {pets ? (
         pets.map((pet) => {
-          return <PetCard key={pet.id} {...pet} />;
+          return <PetCard key={pet?._id} {...pet} />;
         })
       ) : (
         <Flex

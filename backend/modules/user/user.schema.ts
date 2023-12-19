@@ -13,6 +13,7 @@ const userSchema = z.object({
   savedPets: z.array(z.string()),
   fosteredPets: z.array(z.string()),
   adoptedPets: z.array(z.string()),
+  permission: z.number().default(2),
 });
 
 export default userSchema;
