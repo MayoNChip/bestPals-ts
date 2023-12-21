@@ -1,38 +1,30 @@
 import { RequestHandler } from "express";
 import cloudinary from "cloudinary";
+import { TypedRequestHandler } from "../../utils/zodValidation";
 
-const initCloudinary = () => {
-  cloudinary.v2.config({
-    cloud_name: "dmpvdg7al",
-    api_key: "645883948685422",
-    api_secret: "gI1NiE_POmPq1U9FyKWGi02ggJ0",
-  });
-};
-const uploadPetImage: RequestHandler = async (req, res, next) => {
-  const fileStr = req.body;
-  console.log("File ==> ", fileStr);
-  try {
-    const uploadedResponse = await cloudinary.v2.uploader.upload(fileStr.data, {
-      folder: "pets_images",
-    });
-    res.send({ success: true, imageUrl: uploadedResponse.secure_url });
-  } catch (err) {
-    console.log("image upload err", err);
-    next({ success: false, error: err });
-  }
-};
-
-const uploadUserImage: RequestHandler = async (req, res, next) => {
-  const fileStr = req.body;
-  try {
-    const uploadedResponse = await cloudinary.v2.uploader.upload(fileStr.data, {
-      folder: "users_images",
-    });
-    res.send({ success: true, imageUrl: uploadedResponse.secure_url });
-  } catch (err) {
-    console.log("image upload err", err);
-    next({ success: false, error: err });
-  }
+const uploadService = {
+	uploadPetImage: async (imageData: string) => {
+		try {
+			return await cloudinary.v2.uploader.upload(imageData, {
+				folder: "pets_images",
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				throw new Error(error.message);
+			}
+		}
+	},
+	uploadUserImage: async (imageData: string, userId: string) => {
+		try {
+			return await cloudinary.v2.uploader.upload(imageData, {
+				folder: "users_images",
+			});
+		} catch (error) {
+			if (error instanceof Error) {
+				throw new Error(error.message);
+			}
+		}
+	},
 };
 
-export { uploadPetImage, uploadUserImage, initCloudinary };
+export default uploadService;

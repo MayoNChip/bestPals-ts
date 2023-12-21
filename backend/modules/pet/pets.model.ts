@@ -1,15 +1,18 @@
 import mongoose from "mongoose";
 
 const petMongooseSchema = new mongoose.Schema({
-  petType: String,
-  breed: String,
-  petStatus: String,
-  height: Number,
-  weight: Number,
-  color: String,
-  petBio: String,
-  name: String,
-  hypoallergenic: Boolean,
+	type: String,
+	age: String,
+	breed: String,
+	status: String,
+	height: Number,
+	weight: Number,
+	color: String,
+	bio: String,
+	name: String,
+	diet: String,
+	image: String,
+	hypoallergenic: Boolean,
 });
 
 const PetMongooseSchema = mongoose.model("Pet", petMongooseSchema);

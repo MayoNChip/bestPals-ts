@@ -1,8 +1,7 @@
 import express from "express";
 import { petsController } from "./petsController";
 import { validateReq } from "../../utils/zodValidation";
-import PetSchema, { PetParamsSchema } from "./pets.schema";
-import { z } from "zod";
+import PetSchema, { updatePetReqSchema } from "./pets.schema";
 // const authValidate = require("../middlewares/authValidate");
 
 const petsRouter = express.Router();
@@ -13,18 +12,13 @@ petsRouter.get("/:petId", petsController.getById);
 
 petsRouter.post("/", validateReq(PetSchema), petsController.addPet);
 
-// petsRouter.post(
-//   "/status/:petId",
-//   // authValidate.authValidate,
-//   petsController.updatePetStatus
-// );
-
 petsRouter.put(
-	"/:petId",
-	validateReq(PetSchema),
-	//  authValidate.authValidate,
-	petsController.updatePet
+	"/status/:petId",
+	// validateReq(updatePetReqSchema),
+	petsController.updatePetStatus
 );
+
+petsRouter.put("/:petId", validateReq(PetSchema), petsController.updatePet);
 // petsRouter.delete(
 //   "/:petId",
 //   // authValidate.authValidate,

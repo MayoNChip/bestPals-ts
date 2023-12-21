@@ -4,31 +4,52 @@ import { userService } from "../user/user.service";
 import { IPet } from "./pets.schema";
 import { TypedRequestHandler } from "../../utils/zodValidation";
 import { ObjectId } from "mongodb";
+import uploadService from "../upload/upload.service";
+import { IUser } from "../user/user.schema";
 
-const petFromParams: RequestHandler = (req, res, next) => {
-  const petId = req.params.petId;
-  req.pet = new ObjectId(petId);
-  next();
+const petFromParams: RequestHandler = async (req, res, next) => {
+	const petId = req.params.petId;
+	const pet = await petService.getById(new ObjectId(petId));
+	if (!pet) {
+		next();
+	}
+	req.pet = pet.toObject();
+	next();
 };
 const getPets: RequestHandler = async (req, res, next) => {
-  const petsListRes = await petService.getAll();
+	const petsListRes = await petService.getAll();
 
-  res.send(petsListRes);
+	res.send(petsListRes);
 };
 
 const getById: RequestHandler = async (req, res, next) => {
-  const petId = req.pet;
-  if (!petId) {
-    throw new Error("No Pet ID provided");
-  }
-  const pet = await petService.getById(petId);
+	const pet = req.pet;
+	if (!pet) {
+		throw new Error("No Pet ID provided");
+	}
 
-  res.send({ status: "Success", data: pet });
+	res.send({ success: true, data: pet });
 };
 
 const addPet: TypedRequestHandler<{ body: IPet }> = async (req, res, next) => {
-  const newPetId = await petService.addPet(req.body);
-  res.send({ success: true, petId: newPetId });
+	try {
+		if (!req.body.image) {
+			next("Please provide an image");
+			return;
+		}
+		const imageUrl = await uploadService.uploadPetImage(req.body.image);
+		if (!imageUrl) {
+			next("Something went wrong while uploading image");
+			return;
+		}
+		const petWithImageURL = { ...req.body, image: imageUrl?.secure_url };
+		const newPetId = await petService.addPet(petWithImageURL);
+		res.send({ success: true, data: newPetId });
+	} catch (error) {
+		if (error instanceof Error) {
+			next(error);
+		}
+	}
 };
 
 // const changePetStatus: TypedRequestHandler<{ pet: IPet; user: any }> = async (
@@ -51,23 +72,23 @@ const addPet: TypedRequestHandler<{ body: IPet }> = async (req, res, next) => {
 // };
 
 const updatePet: TypedRequestHandler<{
-  body: IPet;
-  // user: any;
-  params: { petId: IPet["_id"] };
+	body: IPet;
+	// user: any;
+	params: { petId: IPet["_id"] };
 }> = async (req, res, next) => {
-  const petId = req.pet;
-  // const user = req.user;
-  if (!petId) {
-    throw new Error("No Pet ID provided");
-  }
-  try {
-    const response = await petService.update(petId, req.body);
-    res.send({ succes: true, updatedPet: response });
-  } catch (err) {
-    if (err instanceof Error) {
-      next(err);
-    }
-  }
+	const pet = req.pet;
+	// const user = req.user;
+	if (!pet?._id) {
+		throw new Error("No Pet ID provided");
+	}
+	try {
+		const response = await petService.update(pet._id, req.body);
+		res.send({ succes: true, updatedPet: response });
+	} catch (err) {
+		if (err instanceof Error) {
+			next(err);
+		}
+	}
 };
 
 // const updateCol: TypedRequestHandler<{
@@ -81,34 +102,26 @@ const updatePet: TypedRequestHandler<{
 //   res.send(`Pet ${data.key} updated!`);
 // };
 
-// const updatePetStatus: TypedRequestHandler<{
-//   pet: IPet;
-//   user: any;
-//   body: { petStatus: string };
-// }> = async (req, res, next) => {
-//   const petId = req.pet._id;
-//   const user = req.user;
-//   const type = req.body?.petStatus;
+const updatePetStatus: TypedRequestHandler<{
+	pet?: IPet;
+	user?: IUser;
+	body: { status: "adopted" | "fostered" | "not-adopted" };
+}> = async (req, res, next) => {
+	const pet = req.pet;
+	if (!pet?._id) {
+		next("Could not find pet with given ID");
+		return;
+	}
+	const user = req.user;
+	const update = req.body;
+	// TODO: set pet to user
 
-//   if (type) {
-//     try {
-//       await userService.setPetToUser(user._id, type, petId);
-//     } catch (error) {
-//       next({ status: 201, msg: error });
-//     }
+	// TODO: update pet status to new status
 
-//     // if (setPetToUserRes.success === false) {
-//     //
-//     //   return;
-//     // }
+	const response = await petService.update(pet._id, update);
 
-//     /// update pet status to new status
-
-//     const response = await petService.update(petId, req.body);
-
-//     res.send({ success: true, updatedPet: response });
-//   }
-// };
+	res.send({ success: true, updatedPet: response });
+};
 
 // const deletePet: RequestHandler = (req, res) => {
 //   const petId = new ObjectId(req.params.petId);
@@ -117,53 +130,53 @@ const updatePet: TypedRequestHandler<{
 // };
 
 const getPetsByFilter: TypedRequestHandler<{
-  body: { operator: string; key: string; value: string }[];
+	body: { operator: string; key: string; value: string }[];
 }> = async (req, res) => {
-  const body = req.body;
-  const fullQuery: { [key: string]: any } = {};
-  let sorting: { weight: -1 | 1; height: -1 | 1 } | {} = {};
+	const body = req.body;
+	const fullQuery: { [key: string]: any } = {};
+	let sorting: { weight: -1 | 1; height: -1 | 1 } | {} = {};
 
-  for (let query in body) {
-    if (!body[query].value) {
-      delete body[query];
-    }
-  }
+	for (let query in body) {
+		if (!body[query].value) {
+			delete body[query];
+		}
+	}
 
-  const getSort = (key: string) => {
-    return key === "weight" ? { weight: -1 } : { height: -1 };
-  };
+	const getSort = (key: string) => {
+		return key === "weight" ? { weight: -1 } : { height: -1 };
+	};
 
-  body.map((query) => {
-    switch (query.operator) {
-      case "eq":
-        fullQuery[query.key] = { $eq: query.value };
-        break;
-      case "regex":
-        fullQuery[query.key] = { $regex: query.value, $options: "i" };
-        break;
-      case "sort":
-        sorting = { sorting: getSort(query.key) };
-        break;
-    }
-  });
+	body.map((query: { operator: string; key: string; value: string }) => {
+		switch (query.operator) {
+			case "eq":
+				fullQuery[query.key] = { $eq: query.value };
+				break;
+			case "regex":
+				fullQuery[query.key] = { $regex: query.value, $options: "i" };
+				break;
+			case "sort":
+				sorting = { sorting: getSort(query.key) };
+				break;
+		}
+	});
 
-  // const sortedQuery = { ...fullQuery, ...sorting };
+	// const sortedQuery = { ...fullQuery, ...sorting };
 
-  const findRes = await petService.findByFilter(fullQuery, sorting);
+	const findRes = await petService.findByFilter(fullQuery, sorting);
 
-  res.send(findRes);
+	res.send(findRes);
 };
 
 export const petsController = {
-  getPets,
-  getById,
-  petFromParams,
-  addPet,
-  updatePet,
-  // changePetStatus,
-  // deletePet,
-  // updatePetStatus,
-  // updateCol,
-  // getReqPet,
-  getPetsByFilter,
+	getPets,
+	getById,
+	petFromParams,
+	addPet,
+	updatePet,
+	// changePetStatus,
+	// deletePet,
+	updatePetStatus,
+	// updateCol,
+	// getReqPet,
+	getPetsByFilter,
 };

@@ -13,6 +13,7 @@ import petsRouter from "./modules/pet/pets.route";
 import { userRouter } from "./modules/user/user.router";
 import authRouter from "./modules/auth/auth.router";
 import uploadRouter from "./modules/upload/upload.router";
+import cloudinary from "cloudinary";
 
 dotenv.config();
 const MONGO_URI = process.env.MONGO_URI;
@@ -43,6 +44,12 @@ mongoose
 	.catch((error) => {
 		console.error("Failed to connect to MongoDB:", error);
 	});
+
+cloudinary.v2.config({
+	cloud_name: "dmpvdg7al",
+	api_key: "645883948685422",
+	api_secret: "gI1NiE_POmPq1U9FyKWGi02ggJ0",
+});
 
 app.get("/", (req: Request, res: Response) => {
 	res.send("Express + TypeScript Server");
