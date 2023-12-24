@@ -1,9 +1,9 @@
 import express, {
-	Express,
-	NextFunction,
-	Request,
-	RequestHandler,
-	Response,
+  Express,
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
 } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -18,7 +18,7 @@ import cloudinary from "cloudinary";
 dotenv.config();
 const MONGO_URI = process.env.MONGO_URI;
 if (!MONGO_URI) {
-	throw new Error("MONGO_URI is not defined");
+  throw new Error("MONGO_URI is not defined");
 }
 const app: Express = express();
 const port = process.env.PORT;
@@ -28,31 +28,31 @@ const port = process.env.PORT;
 app.use(express.json({ limit: "50mb" }));
 
 app.use(
-	cors({
-		origin: [
-			"https://full-stack-pet-adoption-mayo-n-chip.vercel.app",
-			"http://localhost:5173",
-		],
-	})
+  cors({
+    origin: [
+      "https://full-stack-pet-adoption-mayo-n-chip.vercel.app",
+      "http://localhost:5173",
+    ],
+  })
 );
 
 mongoose
-	.connect(MONGO_URI)
-	.then(() => {
-		console.log("Connected to MongoDB");
-	})
-	.catch((error) => {
-		console.error("Failed to connect to MongoDB:", error);
-	});
+  .connect(MONGO_URI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Failed to connect to MongoDB:", error);
+  });
 
 cloudinary.v2.config({
-	cloud_name: "dmpvdg7al",
-	api_key: "645883948685422",
-	api_secret: "gI1NiE_POmPq1U9FyKWGi02ggJ0",
+  cloud_name: "dmpvdg7al",
+  api_key: "645883948685422",
+  api_secret: "gI1NiE_POmPq1U9FyKWGi02ggJ0",
 });
 
 app.get("/", (req: Request, res: Response) => {
-	res.send("Express + TypeScript Server");
+  res.send("Express + TypeScript Server");
 });
 
 app.use("/upload", uploadRouter);
@@ -61,9 +61,9 @@ app.use("/users", userRouter);
 app.use("/pets", petsRouter);
 
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
-	res.status(500).send({ success: false, message: err });
+  res.status(500).send({ success: false, message: err });
 });
 
 app.listen(port, () => {
-	console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });

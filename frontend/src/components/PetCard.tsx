@@ -26,7 +26,7 @@ function PetCard({ _id, name, age, breed, image, type, breed2 }: Props) {
       borderRadius="8px"
       pos="relative"
     >
-      <Avatar mt="20px" size="2xl" src={image} />
+      <Avatar mt="20px" size="2xl" src={image?.toString()} />
 
       <Divider m="20px 0" w="90%" />
       <Flex w="90%" alignItems="center" textAlign="left">

@@ -1,4 +1,4 @@
-import { Flex, Img, Box, Divider, Text } from "@chakra-ui/react";
+import { Flex, Img, Box, Divider, Text, Image } from "@chakra-ui/react";
 
 type Props = {
   title: string;
@@ -10,13 +10,12 @@ function Card(props: Props) {
   return (
     <Flex
       direction="column"
-      w="450px"
-      h="500px"
+      w="25%"
       alignItems="center"
       boxShadow="xl"
       borderRadius="5px"
     >
-      <Box
+      {/* <Box
         bgImage={props.image}
         w="400px"
         h="300px"
@@ -24,13 +23,25 @@ function Card(props: Props) {
         bgPos="top"
         borderRadius="5px"
         mb="10px"
-      ></Box>
+      ></Box> */}
+      <Flex>
+        <Image
+          src={props.image}
+          height="180px"
+          my="10px"
+          roundedTop="5px"
+          objectFit="cover"
+        ></Image>
+      </Flex>
       <Flex direction="column" alignItems="center">
-        <Img w="250px" src={props.title} alt="Dog Adoption" />
-        <Flex alignItems="center" justifyContent="center" h="20px" w="90%">
-          <Divider opacity="30%" w="90%" orientation="horizontal" />
-        </Flex>
-        <Text w="90%" h="100px" mb="20px">
+        <Image
+          src={props.title}
+          alt="Dog Adoption"
+          w="70%"
+          p="10px 20px 0 20px"
+        />
+        <Divider opacity="30%" w="90%" orientation="horizontal" my="20px" />
+        <Text w="90%" mb="20px">
           {props.text}
         </Text>
       </Flex>

@@ -16,11 +16,9 @@ export default function Banner() {
     >
       <Flex
         // bgImg={coverImage}
-        alignItems="center"
-        bgPosition="right"
         bgRepeat="no-repeat"
-        bgSize="100%"
         bgImage={coverImage}
+        bgBlendMode="screen"
         height="100%"
         w="100%"
         // border="1px"
@@ -45,7 +43,7 @@ export default function Banner() {
                 alignSelf="end"
                 color="cyan.500"
               >
-                {userData?.firstname}
+                {userData?.firstName}
               </Text>
             </Flex>
           )}

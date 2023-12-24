@@ -27,13 +27,12 @@ function Navbar() {
   const { handleLogout } = useAuth();
 
   const navigate = useNavigate();
-  // const handleLogoutClick = () => {
-  //   handleLogout();
-  // };
-  console.log(isAdmin, "isAdmin");
+  const Logout = () => {
+    handleLogout();
+  };
 
   return (
-    <Flex w="100%" bgColor="white" h="69px">
+    <Flex bgColor="white">
       <Flex
         className="auth-buttons"
         justifyContent="right"
@@ -94,7 +93,7 @@ function Navbar() {
                   backgroundColor: "cyan.500",
                   color: "white",
                 }}
-                //   onClick={handleLogoutClick}
+                onClick={Logout}
               >
                 Logout
               </MenuItem>

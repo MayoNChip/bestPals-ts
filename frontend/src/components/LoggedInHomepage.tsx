@@ -1,4 +1,4 @@
-import { Flex, Heading, Text, Box, Divider } from "@chakra-ui/react";
+import { Flex, Heading, Text, Box, Divider, Image } from "@chakra-ui/react";
 import { useContext } from "react";
 import Banner from "./Banner";
 // import articleImage from "../img/articleImage.jpg";
@@ -23,22 +23,21 @@ function LoggedInHomepage() {
   return (
     <Flex direction="column">
       <Banner />
-      <Flex justifyContent="center" mt="50px" w="100%" alignItems="center">
-        <Box
+      <Flex
+        justifyContent="center"
+        mt="100px"
+        alignItems="center"
+        maxW="-moz-fit-content"
+        px="25px"
+      >
+        {/* <Box
           bgImage={articleImage}
           bgPosition="center"
           bgRepeat="no-repeat"
           bgSize="120%"
-          height="400px"
-          width="600px"
-        ></Box>
-        <Flex
-          direction="column"
-          height="400px"
-          width="600px"
-          color="blue.900"
-          m="20px 0 0 60px"
-        >
+        ></Box> */}
+        <Image src={articleImage} w="40%"></Image>
+        <Flex direction="column" color="blue.900" m="20px 0 0 60px">
           <Heading size="xl" mb="20px">
             Adopt or foster a pet
           </Heading>
@@ -57,11 +56,11 @@ function LoggedInHomepage() {
         <Divider w="90%"></Divider>
       </Flex>
       <Flex
-        m="0"
-        width="100%"
-        justifyContent="center"
-        gap="20px"
+        justifyContent="space-around"
+        gap="30px"
         textAlign="center"
+        px="10px"
+        h="fit-content"
         // mt="20px"
       >
         <Card
@@ -80,7 +79,6 @@ function LoggedInHomepage() {
           text={petFosterText}
         />
       </Flex>
-      {isAdmin && <Text fontSize="24px">So cool! You're an Admin!</Text>}
     </Flex>
     // <Flex>Hello</Flex>
   );

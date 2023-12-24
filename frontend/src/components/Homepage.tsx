@@ -8,7 +8,7 @@ function Homepage() {
   const { isLoggedIn } = useContext(AuthContext);
 
   return (
-    <Flex flexDirection="column" justifyContent="space-around" w="100%">
+    <Flex flexDirection="column" justifyContent="space-around">
       {isLoggedIn ? <LoggedInHomepage /> : <NotLoggedInHomepage />}
     </Flex>
   );
