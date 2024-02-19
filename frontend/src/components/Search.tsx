@@ -24,11 +24,10 @@ function Search() {
 	const { getPets } = usePets();
 	const [basicSearch, setBasicSearch] = useState(true);
 	const { searchPet } = usePets();
-	const [value, setValue] = useState();
 
 	useEffect(() => {
 		const getPetsList = async () => {
-			const petsList = await getPets();
+			await getPets();
 		};
 		getPetsList();
 	}, [basicSearch]);
@@ -140,7 +139,7 @@ function Search() {
 									<Form>
 										{basicSearch ? (
 											<Field name="petType" mt="20px">
-												{({ field, form, meta }: FieldProps) => (
+												{({ field, meta }: FieldProps) => (
 													<FormControl
 														isInvalid={Boolean(meta.error) && meta.touched}
 													>
@@ -176,7 +175,7 @@ function Search() {
 										) : (
 											<>
 												<Field name="name" mt="20px">
-													{({ field, form, meta }: FieldProps) => (
+													{({ field, meta }: FieldProps) => (
 														<FormControl
 															isInvalid={Boolean(meta.error) && meta.touched}
 														>
@@ -200,7 +199,7 @@ function Search() {
 												</Field>
 												<HStack>
 													<Field name="petType" mt="20px">
-														{({ field, form, meta }: FieldProps) => (
+														{({ field, meta }: FieldProps) => (
 															<FormControl
 																isInvalid={Boolean(meta.error) && meta.touched}
 															>
@@ -228,7 +227,7 @@ function Search() {
 													</Field>
 
 													<Field name="petStatus">
-														{({ field, form, meta }: FieldProps) => (
+														{({ field, meta }: FieldProps) => (
 															<FormControl
 																isInvalid={Boolean(meta.error) && meta.touched}
 															>

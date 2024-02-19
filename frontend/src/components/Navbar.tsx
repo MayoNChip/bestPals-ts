@@ -6,7 +6,6 @@ import {
 	MenuButton,
 	MenuList,
 	MenuItem,
-	Icon,
 	Avatar,
 	Divider,
 	Link,
@@ -24,7 +23,7 @@ import useAuth from "../hooks/useAuth";
 import ModalSignup from "./ModalSignUp";
 
 function Navbar() {
-	const { userData, isLoggedIn, isAdmin, pageTitle } = useContext(AuthContext);
+	const { userData, isLoggedIn, isAdmin } = useContext(AuthContext);
 	const { handleLogout } = useAuth();
 
 	const navigate = useNavigate();

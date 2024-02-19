@@ -1,15 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
 	Modal,
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
-	ModalFooter,
 	ModalBody,
 	ModalCloseButton,
 	useDisclosure,
 	Button,
-	Box,
 	FormControl,
 	FormLabel,
 	Input,
@@ -18,7 +16,7 @@ import {
 	Text,
 } from "@chakra-ui/react";
 import bulletDog from "../img/bulletdog.png";
-import { Formik, Form, Field, setNestedObjectValues, FieldProps } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import useAuth from "../hooks/useAuth";
 
 function ModalSignup() {
@@ -173,7 +171,7 @@ function ModalSignup() {
 										)}
 									</Field>
 									<Field name="email" validate={validateEmail}>
-										{({ field, form, meta }: FieldProps) => (
+										{({ field, meta }: FieldProps) => (
 											<FormControl
 												isInvalid={meta.touched && Boolean(meta.error)}
 											>
@@ -195,7 +193,7 @@ function ModalSignup() {
 										)}
 									</Field>
 									<Field name="password" validate={validatePassword}>
-										{({ field, form, meta }: FieldProps) => (
+										{({ field, meta }: FieldProps) => (
 											<FormControl
 												isInvalid={meta.touched && Boolean(meta.error)}
 											>
@@ -222,7 +220,7 @@ function ModalSignup() {
 											validatePassMatch(props.values.password, value)
 										}
 									>
-										{({ field, form, meta }: FieldProps) => (
+										{({ field, meta }: FieldProps) => (
 											<FormControl
 												isRequired
 												isInvalid={meta.touched && Boolean(meta.error)}
@@ -247,7 +245,7 @@ function ModalSignup() {
 										)}
 									</Field>
 									<Field name="phoneNumber" validate={validatePhoneNumber}>
-										{({ field, form, meta }: FieldProps) => (
+										{({ field, meta }: FieldProps) => (
 											<FormControl
 												isInvalid={meta.touched && Boolean(meta.error)}
 											>

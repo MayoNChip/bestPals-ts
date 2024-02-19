@@ -115,7 +115,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [pageTitle, setPageTitle] = useState("");
 	const [petSavedToUser, setPetSavedToUser] = useState(false);
 
-	const backendURL = import.meta.env.BASE_URL;
+	let backendURL = import.meta.env.VITE_BACKEND_URL;
+	if (import.meta.env.MODE === "development") {
+		backendURL = "http://localhost:4000";
+	}
 
 	//   const { petDetails } = useContext(PetContext);
 	// const { isOwnedByUser } = useUsers();

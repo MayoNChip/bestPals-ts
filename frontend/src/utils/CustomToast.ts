@@ -1,5 +1,4 @@
 import { useToast } from "@chakra-ui/react";
-import UseAuth from "../hooks/useAuth";
 
 export default function CustomToast() {
 	// const { toast } = UseAuth();
