@@ -10,7 +10,7 @@ import { FormikHelpers } from "formik";
 export default function useAuth() {
 	let backendURL: string;
 	if (import.meta.env.MODE === "production") {
-		backendURL = "http://16.16.162.111:4000";
+		backendURL = import.meta.env.BASE_URL;
 	} else {
 		backendURL = "http://localhost:4000";
 	}
