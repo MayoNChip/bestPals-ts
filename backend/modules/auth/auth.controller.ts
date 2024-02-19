@@ -42,7 +42,7 @@ const register: TypedRequestHandler<{ body: RegisterSchema }> = async (
 	const hashedPassword = authService.generateHash(req.body.password);
 	const user = { ...req.body, password: hashedPassword };
 	const { repassword, ...userWithoutRepassword } = user;
-	//   delete user.repassword;
+	//   remove user.repassword;
 
 	if (!usersList) {
 		return next("failed to get users list");
@@ -50,9 +50,11 @@ const register: TypedRequestHandler<{ body: RegisterSchema }> = async (
 	if (usersList.find((i) => i.email === user.email)) {
 		return next("User with this email already exists");
 	}
-	user;
+
 	const newUser = await userService.createNewUser(userWithoutRepassword);
 	const ACCESS_TOKEN = authService.generateAccessToken(newUser._id);
+
+	console.info("new user", newUser._id);
 
 	res.send({
 		success: true,

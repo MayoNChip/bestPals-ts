@@ -15,9 +15,9 @@ import {
 	Text,
 	FormControl,
 } from "@chakra-ui/react";
-import bulletDog from "../../img/bulletdog.png";
+import bulletDog from "../img/bulletdog.png";
 import { Formik, Form, Field, FieldProps } from "formik";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 import { ZodError, z } from "zod";
 
 function ModalLogin() {
