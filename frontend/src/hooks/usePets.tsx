@@ -7,8 +7,7 @@ import CONFIG, { DogBreedsArray } from "../utils/DogAPIConfig";
 import { FormikHelpers } from "formik";
 import { PetResponseType } from "../lib/commonTypes";
 
-const baseURL =
-	import.meta.env.REACT_APP_BACKEND_PROD_BASE_URL || "http://localhost:4000";
+const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 export default function usePets() {
 	const {
@@ -28,23 +27,11 @@ export default function usePets() {
 
 	const imageUpload = async (petId: string) => {
 		const ACCESS_TOKEN = (await localforage.getItem("ACCESS_TOKEN")) as string;
-		// const Headers  =  {
-		// 	Authorization: ACCESS_TOKEN,
-		// };
+
 		const jsonImage = JSON.stringify({ data: petImage });
 		try {
-			// const response = await axios({
-			// 	url: `${baseURL}/upload/pet/${newPetId}`,
-			// 	method: "POST",
-			// 	headers: {
-			// 		"Content-Type": "application/json",
-			// 		Authorization: ACCESS_TOKEN,
-			// 	},
-			// 	data: jsonImage,
-			// });
-
 			const response = await axios.post<{ success: boolean; imageUrl: string }>(
-				`${baseURL}/upload/pet/${petId}`,
+				`${backendURL}/upload/pet/${petId}`,
 				jsonImage,
 				{
 					headers: {
@@ -77,7 +64,7 @@ export default function usePets() {
 		};
 		try {
 			const response = await axios.post<{ success: boolean; data: Pet }>(
-				`${baseURL}/pets/`,
+				`${backendURL}/pets/`,
 				newPet,
 				{
 					headers: Headers,
@@ -104,7 +91,7 @@ export default function usePets() {
 			Authorization: ACCESS_TOKEN,
 		};
 		try {
-			const petList = await axios.get(`${baseURL}/pets/`, {
+			const petList = await axios.get(`${backendURL}/pets/`, {
 				headers,
 			});
 			if (petList.data.length > 0) {
@@ -143,7 +130,7 @@ export default function usePets() {
 	const getPetInfo = async (petId: string) => {
 		try {
 			const response = await axios.get<PetResponseType>(
-				`${baseURL}/pets/${petId}`
+				`${backendURL}/pets/${petId}`
 			);
 			console.log(response.data);
 			if (response.data.success) {
@@ -176,7 +163,7 @@ export default function usePets() {
 
 		try {
 			const updateResponse = await axios.put(
-				`${baseURL}/pets/status/${petId}`,
+				`${backendURL}/pets/status/${petId}`,
 				newPet,
 				{ headers }
 			);
@@ -210,7 +197,7 @@ export default function usePets() {
 		console.log("petAfterUpdate", petAfterUpdate);
 		try {
 			const response = await axios.put(
-				`${baseURL}/pets/${petToUpdate._id}`,
+				`${backendURL}/pets/${petToUpdate._id}`,
 				petAfterUpdate,
 				{ headers }
 			);
@@ -222,7 +209,7 @@ export default function usePets() {
 
 	const searchPet = async (filter: any) => {
 		try {
-			const searchRes = await axios.post(`${baseURL}/pets/search/`, filter);
+			const searchRes = await axios.post(`${backendURL}/pets/search/`, filter);
 			if (searchRes.data.success) {
 				setPets(searchRes.data.message);
 

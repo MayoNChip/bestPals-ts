@@ -9,15 +9,9 @@ import { FormikHelpers } from "formik";
 
 export default function useAuth() {
 	// const { backendURL } = useContext(AuthContext);
-	let backendURL = "http://16.16.162.111:4000";
+	const backendURL =
+		import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
-	if (import.meta.env.MODE === "development") {
-		backendURL = "http://localhost:4000";
-	}
-
-	// const backendURL = "http://16.16.162.111:4000";
-
-	// navigate: NavigateFunction
 	const navigate = useNavigate();
 	const {
 		setLoggedIn,
@@ -95,6 +89,8 @@ export default function useAuth() {
 			console.log("no access token");
 			return;
 		}
+		console.log("backendURL", backendURL, import.meta.env.VITE_MODE);
+
 		try {
 			const user = await axios.get<User>(`${backendURL}/users/me`, {
 				headers: { Authorization: ACCESS_TOKEN },

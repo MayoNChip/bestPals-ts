@@ -20,6 +20,8 @@ function useUsers() {
 	} = useContext(AuthContext);
 	const { setPets } = useContext(PetContext);
 	const { successToast, errorToast } = CustomToast();
+	const backendURL =
+		import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 	const getUsers = async () => {
 		const ACCESS_TOKEN = await localforage.getItem("ACCESS_TOKEN");
@@ -27,12 +29,9 @@ function useUsers() {
 			Authorization: ACCESS_TOKEN,
 		} as { Authorization: string | null };
 		try {
-			const usersList = await axios.get<User[]>(
-				"http://localhost:4000/users/",
-				{
-					headers: Headers,
-				}
-			);
+			const usersList = await axios.get<User[]>(`${backendURL}/users/`, {
+				headers: Headers,
+			});
 			if (usersList) {
 				setUsers(usersList.data);
 				return usersList.data;
@@ -82,7 +81,7 @@ function useUsers() {
 			Authorization: ACCESS_TOKEN as string,
 		};
 		try {
-			const userRes = await axios.get(`http://localhost:4000/users/${userId}`, {
+			const userRes = await axios.get(`${backendURL}/users/${userId}`, {
 				headers: Headers,
 			});
 			setNewUserDetails(userRes.data.data);
@@ -105,7 +104,7 @@ function useUsers() {
 			const petsResponse = await axios.get<{
 				success: boolean;
 				data: Record<string | "adoptedFosteredPets" | "savedPets", Pet[]>;
-			}>("http://localhost:4000/users/mypets", { headers });
+			}>(`${backendURL}/users/mypets`, { headers });
 			if (!petsResponse?.data.success) {
 				return { success: false, msg: "No pets found" };
 			}
@@ -142,7 +141,7 @@ function useUsers() {
 				Authorization: ACCESS_TOKEN,
 			};
 			const petsRes = await axios.get(
-				`http://localhost:4000/users/userPets/${userId}`,
+				`${backendURL}/users/userPets/${userId}`,
 				{ headers: Headers }
 			);
 			setUserPets(petsRes.data.data);
@@ -161,7 +160,7 @@ function useUsers() {
 		};
 		try {
 			const updateRes = await axios.put(
-				`http://localhost:4000/users/${user._id}`,
+				`${backendURL}/users/${user._id}`,
 				user,
 				{ headers: Headers }
 			);
@@ -184,7 +183,7 @@ function useUsers() {
 				newPassword: passwordsOBJ.newPassword,
 			};
 			const passChangeRes = await axios.put(
-				"http://localhost:4000/users/",
+				`${backendURL}/users/`,
 				newPassword,
 				{ headers: Headers }
 			);
@@ -206,7 +205,7 @@ function useUsers() {
 				Authorization: ACCESS_TOKEN,
 			};
 			const savePetRes = await axios.put(
-				`http://localhost:4000/users/savepet/${petId}`,
+				`${backendURL}/users/savepet/${petId}`,
 				{},
 				{ headers }
 			);
@@ -260,7 +259,7 @@ function useUsers() {
 
 		try {
 			const savePetRes = await axios.patch(
-				`http://localhost:4000/users/${userId}`,
+				`${backendURL}/users/${userId}`,
 				{
 					type: (status === "not-adopted" ? "return" : status) + "Pets",
 					petId,
