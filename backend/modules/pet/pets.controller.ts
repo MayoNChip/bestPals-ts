@@ -133,6 +133,7 @@ const getPetsByFilter: TypedRequestHandler<{
 	body: { operator: string; key: string; value: string }[];
 }> = async (req, res) => {
 	const body = req.body;
+	console.log("body", body);
 	const fullQuery: { [key: string]: any } = {};
 	let sorting: { weight: -1 | 1; height: -1 | 1 } | {} = {};
 
@@ -142,6 +143,7 @@ const getPetsByFilter: TypedRequestHandler<{
 		}
 	}
 
+	console.log("body after deleting", body);
 	const getSort = (key: string) => {
 		return key === "weight" ? { weight: -1 } : { height: -1 };
 	};
@@ -150,6 +152,7 @@ const getPetsByFilter: TypedRequestHandler<{
 		switch (query.operator) {
 			case "eq":
 				fullQuery[query.key] = { $eq: query.value };
+				console.log("fullQuery", fullQuery);
 				break;
 			case "regex":
 				fullQuery[query.key] = { $regex: query.value, $options: "i" };

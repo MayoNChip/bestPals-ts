@@ -21,7 +21,7 @@ export type User = {
 	fosteredPets: string[];
 	adoptedPets: string[];
 	permission: number;
-	phonenumber?: string;
+	phoneNumber?: string;
 };
 
 export const defaultNewUser = {
@@ -34,6 +34,19 @@ export const defaultNewUser = {
 	fosteredPets: [],
 	adoptedPets: [],
 };
+
+export type emptyUser =
+	| {
+			firstName?: string;
+			lastName?: string;
+			email?: string;
+			phonenumber?: string;
+			permission?: number;
+			savedPets?: string[];
+			fosteredPets?: string[];
+			adoptedPets?: string[];
+	  }
+	| undefined;
 
 type OwnedByUser = {
 	saved: string[];
@@ -50,8 +63,8 @@ type AuthContextType = {
 	setIsAdmin: Dispatch<SetStateAction<boolean>>;
 	isLoading: boolean;
 	setIsLoading: Dispatch<SetStateAction<boolean>>;
-	newUserDetails: User;
-	setNewUserDetails: Dispatch<SetStateAction<User>>;
+	// newUserDetails: User;
+	// setNewUserDetails: Dispatch<SetStateAction<User>>;
 	userImage: string | undefined;
 	setUserImage: Dispatch<SetStateAction<string | undefined>>;
 	newImageDisplay: String | ArrayBuffer | null;
@@ -94,7 +107,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [userData, setUserData] = useState<User | null>(null);
 	//   const { checkIsLoggedIn } = UseAuth();
 	const [isLoading, setIsLoading] = useState(false);
-	const [newUserDetails, setNewUserDetails] = useState<User>(defaultNewUser);
+	// const [newUserDetails, setNewUserDetails] = useState<User>(defaultNewUser);
 	//   const [isProfileUpdated, setIsProfileUpdated] = useState(false);
 	const [userImage, setUserImage] = useState<string | undefined>(undefined);
 	const [newImageDisplay, setNewImageDisplay] = useState<
@@ -171,6 +184,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		};
 	}, [
 		isLoggedIn,
+		isEdit,
 		// isOwnedByUser,
 		// petDetails
 	]);
@@ -211,8 +225,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				setIsAdmin,
 				isLoading,
 				setIsLoading,
-				newUserDetails,
-				setNewUserDetails,
+				// newUserDetails,
+				// setNewUserDetails,
 				userImage,
 				setUserImage,
 				newImageDisplay,

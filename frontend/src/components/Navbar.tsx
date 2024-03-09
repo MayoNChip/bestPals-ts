@@ -133,7 +133,7 @@ function Navbar() {
 								</Flex>
 							</Flex>
 						) : (
-							<Flex w="150px" justifyContent="space-between">
+							<Flex w="150px" justifyContent="space-between" mr="15px">
 								<ModalLogin />
 								<ModalSignup />
 							</Flex>

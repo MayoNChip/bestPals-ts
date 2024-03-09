@@ -5,61 +5,59 @@ import logo from "../img/biglogo.png";
 import AuthContext from "../context/AuthContext";
 
 export default function Banner() {
-  const { userData, isLoggedIn } = useContext(AuthContext);
-  return (
-    <Flex
-      alignItems="center"
-      w="100%"
-      justifyContent="space-evenly"
-      h="700px"
-      boxShadow="lg"
-    >
-      <Flex
-        // bgImg={coverImage}
-        bgRepeat="no-repeat"
-        bgImage={coverImage}
-        bgBlendMode="screen"
-        height="100%"
-        w="100%"
-        // border="1px"
-        //   bgColor="gray.100"
-      >
-        <Flex w="40%" h="100%" direction="column">
-          {isLoggedIn && (
-            <Flex direction="column" w="200px" m="60px 0  0 60px">
-              <Text
-                lineHeight="0.5"
-                fontSize="36px"
-                fontWeight="black"
-                color="red.500"
-              >
-                Welcome Back,
-              </Text>
-              <Text
-                fontFamily="heading"
-                lineHeight="0.5"
-                fontSize="42px"
-                fontWeight="black"
-                alignSelf="end"
-                color="cyan.500"
-              >
-                {userData?.firstName}
-              </Text>
-            </Flex>
-          )}
-          <Flex direction="column" alignItems="center" mt="100px">
-            <Img src={logo} alt="logo" width="400px" />
-            <Box width="450px" height="100px" textAlign="center">
-              <Heading fontSize="48">A Pal For Life</Heading>
+	const { userData, isLoggedIn } = useContext(AuthContext);
+	return (
+		<Flex
+			alignItems="center"
+			w="100%"
+			justifyContent="space-evenly"
+			h="700px"
+			boxShadow="lg"
+		>
+			<Flex
+				bgRepeat="no-repeat"
+				bgImage={coverImage}
+				bgBlendMode="screen"
+				height="100%"
+				w="100%"
+				bgSize={"cover"}
+			>
+				<Flex w="40%" h="100%" direction="column">
+					{isLoggedIn && (
+						<Flex direction="column" w="200px" m="60px 0  0 60px">
+							<Text
+								lineHeight="0.5"
+								fontSize="36px"
+								fontWeight="black"
+								color="red.500"
+							>
+								Welcome Back,
+							</Text>
+							<Text
+								fontFamily="heading"
+								lineHeight="0.5"
+								fontSize="42px"
+								fontWeight="black"
+								alignSelf="end"
+								color="cyan.500"
+							>
+								{userData?.firstName}
+							</Text>
+						</Flex>
+					)}
+					<Flex direction="column" alignItems="center" mt="100px">
+						<Img src={logo} alt="logo" width="400px" />
+						<Box width="450px" height="100px" textAlign="center">
+							<Heading fontSize="48">A Pal For Life</Heading>
 
-              <Text fontSize="32" fontWeight="bold" lineHeight="9">
-                So you want to add a family member? There is no better way than
-                to adopt a shelter pet and give him or her a second chance.
-              </Text>
-            </Box>
-          </Flex>
-        </Flex>
-      </Flex>
-    </Flex>
-  );
+							<Text fontSize="32" fontWeight="bold" lineHeight="9">
+								So you want to add a family member? There is no better way than
+								to adopt a shelter pet and give him or her a second chance.
+							</Text>
+						</Box>
+					</Flex>
+				</Flex>
+			</Flex>
+		</Flex>
+	);
 }

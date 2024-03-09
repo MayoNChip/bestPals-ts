@@ -1,5 +1,5 @@
 import express from "express";
-import { petsController } from "./petsController";
+import { petsController } from "./pets.controller";
 import { validateReq } from "../../utils/zodValidation";
 import PetSchema, { updatePetReqSchema } from "./pets.schema";
 // const authValidate = require("../middlewares/authValidate");

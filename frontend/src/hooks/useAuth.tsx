@@ -8,7 +8,12 @@ import { FormikHelpers } from "formik";
 // import { NavigateFunction, useNavigate } from "react-router-dom";
 
 export default function useAuth() {
-	const { backendURL } = useContext(AuthContext);
+	// const { backendURL } = useContext(AuthContext);
+	let backendURL = "http://16.16.162.111:4000";
+
+	if (import.meta.env.MODE === "development") {
+		backendURL = "http://localhost:4000";
+	}
 
 	// const backendURL = "http://16.16.162.111:4000";
 
@@ -17,9 +22,9 @@ export default function useAuth() {
 	const {
 		setLoggedIn,
 		setIsOwnedByUser,
-		setNewUserDetails,
+		// setNewUserDetails,
 		newImageDisplay,
-		newUserDetails,
+		// newUserDetails,
 		userData,
 	} = useContext(AuthContext);
 	const { errorToast, successToast } = CustomToast();
@@ -124,7 +129,7 @@ export default function useAuth() {
 		}
 	};
 
-	const updateUserDetails = async (updatedValues: any) => {
+	const updateUserDetails = async (updatedValues: User | Partial<User>) => {
 		try {
 			// setIsLoading(true);
 			const ACCESS_TOKEN: string | null = await localforage.getItem(
@@ -133,18 +138,20 @@ export default function useAuth() {
 			if (!ACCESS_TOKEN) {
 				throw new Error("No Access Token");
 			}
-			const response = await axios.put(
+			const response = await axios.put<{ success: boolean; message: string }>(
 				`${backendURL}/users/${userData?._id}`,
 				updatedValues,
 				{ headers: { Authorization: ACCESS_TOKEN } }
 			);
-			if (response.status === 200) {
-				setNewUserDetails(updatedValues);
-			}
+			// if (response.status === 200) {
+			// 	setNewUserDetails(updatedValues);
+			// }
 
-			return response.data;
+			return { success: true, message: response.data };
 		} catch (error) {
-			console.log("updatig user details error", error);
+			if (error instanceof AxiosError) {
+				return { success: false, message: error.response?.data.message };
+			}
 		}
 	};
 
@@ -152,7 +159,8 @@ export default function useAuth() {
 		const ACCESS_TOKEN: string | null = await localforage.getItem(
 			"ACCESS_TOKEN"
 		);
-		const userData: any = await localforage.getItem("userInfo");
+		const userData: User | null = await localforage.getItem("userInfo");
+
 		if (!ACCESS_TOKEN || !userData) {
 			throw new Error("No Access Token");
 		}
@@ -165,23 +173,24 @@ export default function useAuth() {
 			data: newImageDisplay,
 		});
 		try {
-			const response = await axios({
+			const response = await axios<{ success: boolean; imageUrl: string }>({
 				url: `${backendURL}/upload/user/${userId}`,
 				method: "POST",
 				headers: Headers,
 				data: jsonImage,
 			});
-			if (response.data.imageUrl) {
-				// {
-				//   ...newUserDetails,
-				//   image: response.data.imageUrl,
-				// }
-				setNewUserDetails({ ...newUserDetails, image: response.data.imageUrl });
-			}
+			// if (response.data.imageUrl) {
+			// {
+			//   ...newUserDetails,
+			//   image: response.data.imageUrl,
+			// }
+			// setNewUserDetails({ ...newUserDetails, image: response.data.imageUrl });
+			// }
 			return response.data.imageUrl;
 		} catch (error: any) {
-			console.log("send image to backend error", error.message);
-			return error;
+			if (error instanceof Error) {
+				return error.message;
+			}
 		}
 	};
 

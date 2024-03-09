@@ -28,7 +28,8 @@ function PetDetails() {
 	const { petId } = useParams();
 	const { getPetInfo, updatePet } = usePets();
 	const { petDetails } = useContext(PetContext);
-	const { isOwnedByUser, userData, petSavedToUser } = useContext(AuthContext);
+	const { isOwnedByUser, userData, petSavedToUser, isLoggedIn } =
+		useContext(AuthContext);
 	const { successToast } = CustomToast();
 	const [isLoaded, setIsLoaded] = useState(false);
 	const { isOwner, updateOwnedPets } = useUsers();
@@ -104,13 +105,13 @@ function PetDetails() {
 		<Flex justifyContent="center">
 			{isLoaded && (
 				<Flex
-					w="500px"
-					minH="800px"
+					p="10px"
+					w="550px"
 					direction="column"
 					alignItems="center"
 					position="relative"
 					boxShadow="md"
-					mt="20px"
+					// mt="20px"
 				>
 					<Box
 						h="350px"
@@ -119,19 +120,24 @@ function PetDetails() {
 						bgSize="cover"
 						backgroundRepeat="no-repeat"
 						bgPosition="left"
-						position="absolute"
+						// position="absolute"
 					/>
 					<Flex
-						mt="300px"
+						// mt="300px"
 						className="dog-image"
 						borderRadius="50%"
 						border="solid #8FCBFF 2px"
 						overflow="hidden"
 					></Flex>
-					<Heading size="2xl" fontWeight="bold" mt="60px">
+					<Heading size="2xl" fontWeight="bold" py="20px">
 						{petDetails?.name}
 					</Heading>
-					<Tag mt="10px" size="lg" colorScheme={getTagColor(petDetails.status)}>
+					<Tag
+						py="10px"
+						my="10px"
+						size="lg"
+						colorScheme={getTagColor(petDetails.status)}
+					>
 						<TagLabel fontSize="lg">
 							{petDetails.status === "adopted" && "Adopted"}
 							{petDetails.status === "not-adopted" && "Waiting for a family"}
@@ -143,11 +149,11 @@ function PetDetails() {
 						bgColor="#4BBAED"
 						w="90%"
 						boxShadow="xl"
-						m="10px 0"
+						my="10px"
 					></Divider>
-					<Flex alignItems="flex-start" direction="column" w="90%">
+					<Flex alignItems="flex-start" direction="column" w="90%" gap="10px">
 						<Flex justifyContent="space-between" w="100%" alignItems="center">
-							<Flex mt="30px">
+							<Flex alignItems="center">
 								{petDetails?.breed2 ? (
 									<Flex>
 										<Text fontSize="2xl" mr="5px">
@@ -168,16 +174,14 @@ function PetDetails() {
 									</Flex>
 								)}
 							</Flex>
-							<Flex mt="30px">
-								<Text fontSize="2xl" ml="10px">
-									Age:
-								</Text>
+							<Flex>
+								<Text fontSize="2xl">Age:</Text>
 								<Text fontSize="2xl" fontWeight="bold">
 									{petDetails?.age} yo
 								</Text>
 							</Flex>
 						</Flex>
-						<Flex w="100%" justifyContent="space-between" mt="20px">
+						<Flex w="100%" justifyContent="space-between">
 							<Flex>
 								<Text fontSize="2xl">Color:</Text>
 								<Text fontSize="2xl" fontWeight="bold">
@@ -186,7 +190,7 @@ function PetDetails() {
 							</Flex>
 
 							<Flex alignItems="center">
-								<Text fontSize="2xl" mr="10px">
+								<Text fontSize="2xl" pr="10px">
 									Hypoallergenic
 								</Text>
 								{petDetails?.hypoallergenic ? (
@@ -196,7 +200,7 @@ function PetDetails() {
 								)}
 							</Flex>
 						</Flex>
-						<Flex w="100%" justifyContent="space-between" mt="20px">
+						<Flex w="100%" justifyContent="space-between">
 							<Flex>
 								<Text fontSize="2xl">Weight: </Text>
 								<Text fontSize="2xl" fontWeight="bold">
@@ -214,7 +218,7 @@ function PetDetails() {
 							</Flex>
 						</Flex>
 
-						<Heading size="lg" padding="10px 20px" mt="30px">
+						<Heading size="lg" padding="10px 20px">
 							{petDetails?.name}'s Bio:
 						</Heading>
 						<Container
@@ -229,135 +233,137 @@ function PetDetails() {
 								{petDetails.bio}
 							</Text>
 						</Container>
-						<Flex
-							mt="20px"
-							p="10px"
-							w="100%"
-							justifyContent="space-around"
-							mb="20px"
-						>
-							{petDetails.status !== "adopted" && (
-								<Button
-									bgColor="#EE7162"
-									color="white"
-									leftIcon={<BiHomeHeart />}
-									_hover={{
-										cursor: "pointer",
-										bgColor: "red.500",
-										color: "white",
-									}}
-									_active={{ bgColor: "#8e2115" }}
-									_focus={{ outline: "none" }}
-									shadow="base"
-									onClick={() => {
-										handlePetStatus("adopted");
-									}}
-									isDisabled={
-										petDetails.status !== "not-adopted" &&
-										petDetails.status !== "fostered"
-											? true
-											: false
-									}
-								>
-									<Text fontSize="18px">Adopt {petDetails?.name}</Text>
-								</Button>
-							)}
-
-							{isLoaded &&
-								petDetails?.status !== "adopted" &&
-								petDetails.status !== "fostered" &&
-								!isOwnedByUser.fostered.includes(petId) && (
-									<>
-										<Divider orientation="vertical" />
-										<Button
-											leftIcon={<GoHome />}
-											bgColor="#EE7162"
-											color="white"
-											_hover={{
-												cursor: "pointer",
-												bgColor: "red.500",
-												color: "white",
-											}}
-											_active={{ bgColor: "#8e2115" }}
-											_focus={{ outline: "none" }}
-											shadow="base"
-											onClick={() => {
-												handlePetStatus("fostered");
-											}}
-											isDisabled={userData?._id ? false : true}
-											// isDisabled={
-											//   petDetails?.status !== "not-adopted" ? true : false
-											// }
-										>
-											<Text fontSize="18px" colorScheme="red">
-												Foster {petDetails?.name}
-											</Text>
-										</Button>
-									</>
+						{isLoggedIn && (
+							<Flex
+								// mt="20px"
+								p="10px"
+								w="100%"
+								justifyContent="space-around"
+								// mb="20px"
+							>
+								{petDetails.status !== "adopted" && (
+									<Button
+										bgColor="#EE7162"
+										color="white"
+										leftIcon={<BiHomeHeart />}
+										_hover={{
+											cursor: "pointer",
+											bgColor: "red.500",
+											color: "white",
+										}}
+										_active={{ bgColor: "#8e2115" }}
+										_focus={{ outline: "none" }}
+										shadow="base"
+										onClick={() => {
+											handlePetStatus("adopted");
+										}}
+										isDisabled={
+											petDetails.status !== "not-adopted" &&
+											petDetails.status !== "fostered"
+												? true
+												: false
+										}
+									>
+										<Text fontSize="18px">Adopt {petDetails?.name}</Text>
+									</Button>
 								)}
 
-							{isLoaded &&
-								petDetails?.status !== "adopted" &&
-								isOwnedByUser.fostered.includes(petId) && (
-									<>
-										<Divider orientation="vertical" />
-										<Button
-											leftIcon={<IoReturnDownBack />}
-											bgColor="#b7b7b7"
-											color="white"
-											_hover={{
-												cursor: "pointer",
-												bgColor: "gray.500",
-												color: "white",
-											}}
-											_active={{ bgColor: "gray.800" }}
-											_focus={{ outline: "none" }}
-											shadow="base"
-											onClick={() => {
-												handlePetStatus("not-adopted");
-											}}
-											isDisabled={!isOwnedByUser?.fostered?.includes(petId)}
-										>
-											<Text fontSize="18px">Return {petDetails?.name}</Text>
-										</Button>
-										<Divider orientation="vertical" />
-									</>
-								)}
+								{isLoaded &&
+									petDetails?.status !== "adopted" &&
+									petDetails.status !== "fostered" &&
+									!isOwnedByUser.fostered.includes(petId) && (
+										<>
+											<Divider orientation="vertical" />
+											<Button
+												leftIcon={<GoHome />}
+												bgColor="#EE7162"
+												color="white"
+												_hover={{
+													cursor: "pointer",
+													bgColor: "red.500",
+													color: "white",
+												}}
+												_active={{ bgColor: "#8e2115" }}
+												_focus={{ outline: "none" }}
+												shadow="base"
+												onClick={() => {
+													handlePetStatus("fostered");
+												}}
+												isDisabled={userData?._id ? false : true}
+												// isDisabled={
+												//   petDetails?.status !== "not-adopted" ? true : false
+												// }
+											>
+												<Text fontSize="18px" colorScheme="red">
+													Foster {petDetails?.name}
+												</Text>
+											</Button>
+										</>
+									)}
 
-							{isLoaded && isOwnedByUser?.saved.includes(petId) ? (
-								<Button
-									bgColor="white"
-									color="#ff5947"
-									_hover={{
-										cursor: "pointer",
-										bgColor: "white",
-										color: "#ff5947",
-									}}
-									_focus={{ outline: "none" }}
-									shadow="md"
-									onClick={handleSavePet}
-									isDisabled={userData?._id ? false : true}
-								>
-									<Icon as={IoIosHeartDislike} />
-								</Button>
-							) : (
-								<Button
-									bgColor="red.500"
-									color="white"
-									_hover={{
-										cursor: "pointer",
-										bgColor: "#ff5947",
-										color: "white ",
-									}}
-									_focus={{ outline: "none" }}
-									shadow="md"
-									onClick={handleSavePet}
-									isDisabled={userData?._id ? false : true}
-								>
-									<Icon as={RiHeartAddFill} />
-								</Button>
-							)}
-						</Flex>
+								{isLoaded &&
+									petDetails?.status !== "adopted" &&
+									isOwnedByUser.fostered.includes(petId) && (
+										<>
+											<Divider orientation="vertical" />
+											<Button
+												leftIcon={<IoReturnDownBack />}
+												bgColor="#b7b7b7"
+												color="white"
+												_hover={{
+													cursor: "pointer",
+													bgColor: "gray.500",
+													color: "white",
+												}}
+												_active={{ bgColor: "gray.800" }}
+												_focus={{ outline: "none" }}
+												shadow="base"
+												onClick={() => {
+													handlePetStatus("not-adopted");
+												}}
+												isDisabled={!isOwnedByUser?.fostered?.includes(petId)}
+											>
+												<Text fontSize="18px">Return {petDetails?.name}</Text>
+											</Button>
+											<Divider orientation="vertical" />
+										</>
+									)}
+
+								{isLoaded && isOwnedByUser?.saved.includes(petId) ? (
+									<Button
+										bgColor="white"
+										color="#ff5947"
+										_hover={{
+											cursor: "pointer",
+											bgColor: "white",
+											color: "#ff5947",
+										}}
+										_focus={{ outline: "none" }}
+										shadow="md"
+										onClick={handleSavePet}
+										isDisabled={userData?._id ? false : true}
+									>
+										<Icon as={IoIosHeartDislike} />
+									</Button>
+								) : (
+									<Button
+										bgColor="red.500"
+										color="white"
+										_hover={{
+											cursor: "pointer",
+											bgColor: "#ff5947",
+											color: "white ",
+										}}
+										_focus={{ outline: "none" }}
+										shadow="md"
+										onClick={handleSavePet}
+										isDisabled={userData?._id ? false : true}
+									>
+										<Icon as={RiHeartAddFill} />
+									</Button>
+								)}
+							</Flex>
+						)}
 					</Flex>
 				</Flex>
 			)}

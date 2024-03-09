@@ -50,14 +50,14 @@ function Search() {
 							w="150px"
 							id="basic"
 							ref={selection}
-							bgColor={basicSearch ? "red.400" : "transparent"}
-							color={basicSearch ? "white" : "black"}
+							bgColor={basicSearch ? "cyan.400" : "transparent"}
+							color={basicSearch ? "white" : "cyan.400"}
 							borderRadius="7px 0 0 7px"
-							bg="none"
 							_hover={{
-								borderTop: "#E62F19 2px solid",
+								color: "white",
+								bgColor: "cyan.300",
 							}}
-							// _focus="none"
+							_focus={{ outline: "none" }}
 							onClick={setActive}
 						>
 							Basic
@@ -67,12 +67,11 @@ function Search() {
 							w="150px"
 							id="advanced"
 							ref={selection}
-							bgColor={!basicSearch ? "red.400" : "transparent"}
-							color={!basicSearch ? "white" : "black"}
-							bg="none"
+							bgColor={!basicSearch ? "cyan.400" : "transparent"}
+							color={!basicSearch ? "white" : "cyan.400"}
 							borderRadius="0 7px 7px 0"
-							_hover={{ borderTop: "#E53E3E 2px solid" }}
-							// _focus="none"
+							_hover={{ color: "white", bgColor: "cyan.300" }}
+							_focus={{ outline: "none" }}
 							onClick={setActive}
 							_active={{ backgroundColor: "#dbf4ff" }}
 						>
@@ -83,16 +82,16 @@ function Search() {
 						<>
 							<Formik<{
 								name: string;
-								petType: string;
-								petStatus: string;
+								type: string;
+								status: string;
 								weight: boolean;
 								height: boolean;
 								[key: string]: string | boolean;
 							}>
 								initialValues={{
 									name: "",
-									petType: "",
-									petStatus: "",
+									type: "",
+									status: "",
 									weight: false,
 									height: false,
 								}}
@@ -100,9 +99,9 @@ function Search() {
 									if (basicSearch) {
 										const searchQuery = [
 											{
-												key: "petType",
+												key: "type",
 												operator: "eq",
-												value: values["petType"],
+												value: values["type"],
 											},
 										];
 										await searchPet(searchQuery);
@@ -138,7 +137,7 @@ function Search() {
 								{(props) => (
 									<Form>
 										{basicSearch ? (
-											<Field name="petType" mt="20px">
+											<Field name="type" mt="20px">
 												{({ field, meta }: FieldProps) => (
 													<FormControl
 														isInvalid={Boolean(meta.error) && meta.touched}
@@ -149,7 +148,7 @@ function Search() {
 															justifyContent="center"
 														>
 															<FormLabel
-																htmlFor="petType"
+																htmlFor="type"
 																fontSize="lg"
 																fontWeight="black"
 															>
@@ -158,7 +157,7 @@ function Search() {
 															<Select
 																variant="flushed"
 																{...field}
-																id="petType"
+																id="type"
 																placeholder="Select type"
 																w="150px"
 															>
@@ -167,7 +166,7 @@ function Search() {
 															</Select>
 														</Flex>
 														<FormErrorMessage>
-															{props.errors.petType}
+															{props.errors.type}
 														</FormErrorMessage>
 													</FormControl>
 												)}
@@ -198,14 +197,14 @@ function Search() {
 													)}
 												</Field>
 												<HStack>
-													<Field name="petType" mt="20px">
+													<Field name="type" mt="20px">
 														{({ field, meta }: FieldProps) => (
 															<FormControl
 																isInvalid={Boolean(meta.error) && meta.touched}
 															>
 																<FormLabel
 																	mt="20px"
-																	htmlFor="petType"
+																	htmlFor="type"
 																	fontSize="lg"
 																	fontWeight="black"
 																>
@@ -213,27 +212,27 @@ function Search() {
 																</FormLabel>
 																<Select
 																	{...field}
-																	id="petType"
+																	id="type"
 																	placeholder="Select type"
 																>
 																	<option value="dog">Dog</option>
 																	<option value="cat">Cat</option>
 																</Select>
 																<FormErrorMessage>
-																	{props.errors.petType}
+																	{props.errors.type}
 																</FormErrorMessage>
 															</FormControl>
 														)}
 													</Field>
 
-													<Field name="petStatus">
+													<Field name="status">
 														{({ field, meta }: FieldProps) => (
 															<FormControl
 																isInvalid={Boolean(meta.error) && meta.touched}
 															>
 																<FormLabel
 																	mt="20px"
-																	htmlFor="petStatus"
+																	htmlFor="status"
 																	fontSize="lg"
 																	fontWeight="black"
 																>
@@ -241,8 +240,8 @@ function Search() {
 																</FormLabel>
 																<Select
 																	{...field}
-																	name="petStatus"
-																	id="petStatus"
+																	name="status"
+																	id="status"
 																	placeholder="Select pet status"
 																>
 																	<option value="not-adopted">
@@ -253,7 +252,7 @@ function Search() {
 																</Select>
 
 																<FormErrorMessage>
-																	{props.errors.petStatus}
+																	{props.errors.status}
 																</FormErrorMessage>
 															</FormControl>
 														)}
@@ -312,10 +311,10 @@ function Search() {
 										<Flex justifyContent="space-around">
 											<Button
 												mt={4}
-												colorScheme="red"
+												colorScheme="cyan"
 												variant="outline"
 												w="120px"
-												// _focus="none"
+												_focus={{ outline: "none" }}
 												onClick={() => {
 													props.handleReset();
 												}}
@@ -326,12 +325,12 @@ function Search() {
 												mt={4}
 												isLoading={props.isSubmitting}
 												type="submit"
-												bgColor="red.400"
+												// bgColor="red.600"
+												colorScheme="cyan"
 												color="white"
-												bg="none"
-												_hover={{ bgColor: "red.500" }}
-												// _focus="none"
-												_active={{ bgColor: "cyan.300" }}
+												// _hover={{ bgColor: "red.400" }}
+												// _focus={{ outline: "none" }}
+												// _active={{ bgColor: "red.700" }}
 												w="120px"
 											>
 												Search

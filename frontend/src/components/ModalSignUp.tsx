@@ -134,6 +134,8 @@ function ModalSignup() {
 											>
 												<FormLabel htmlFor="firstName">First name</FormLabel>
 												<Input
+													fontSize="xl"
+													fontWeight="medium"
 													{...field}
 													id="firstName"
 													onInput={() => {
@@ -199,6 +201,7 @@ function ModalSignup() {
 											>
 												<FormLabel htmlFor="password">Password</FormLabel>
 												<Input
+													type="password"
 													{...field}
 													onInput={() => {
 														props.setStatus(false);
@@ -229,6 +232,7 @@ function ModalSignup() {
 													Confirm Password
 												</FormLabel>
 												<Input
+													type="password"
 													{...field}
 													onInput={() => {
 														props.setStatus(false);

@@ -16,11 +16,15 @@ import Search from "./components/Search";
 import ProfileSettings from "./components/ProfileSettings";
 import Pet from "./components/PetDetails";
 import AddPet from "./components/admin/AddPet";
+import SecuredRoutes from "./hooks/SecuredRoutes";
+import AuthContext from "./context/AuthContext";
+import { useContext } from "react";
 // import AddPet from "./components/admin/AddPet";
 // import Pet from "./components/Pet";
 // import ModalUser from "./components/admin/ModalUser";
 
 function App() {
+	const { isLoggedIn } = useContext(AuthContext);
 	return (
 		// <Flex className="App" w="100vw" h="100vh" direction="column">
 		//   {isLoading ? (
@@ -137,14 +141,16 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Homepage />} />
 					<Route path="/home" element={<Homepage />} />
+
 					<Route
 						path="/mypets"
 						element={
-							// <SecuredRoutes>
-							<Mypets />
-							// </SecuredRoutes>
+							<SecuredRoutes>
+								<Mypets />
+							</SecuredRoutes>
 						}
 					/>
+
 					<Route path="/search" element={<Search />} />
 					<Route
 						path="/profilesettings"

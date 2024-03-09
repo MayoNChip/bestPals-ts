@@ -9,38 +9,37 @@ import {
 	AvatarBadge,
 	Avatar,
 	IconButton,
+	Toast,
+	useToast,
 } from "@chakra-ui/react";
 import { ChangeEvent, useContext, useRef, useState } from "react";
 import { EditIcon } from "@chakra-ui/icons";
 import banner from "../img/petBanner.jpg";
 import footerImage from "../img/petgang.png";
-import AuthContext, { defaultNewUser } from "../context/AuthContext";
+import AuthContext, { User, defaultNewUser } from "../context/AuthContext";
 import useAuth from "../hooks/useAuth";
 import ModalChangePassword from "./ui/ModalChangePassword";
 
 function ProfileSettings() {
-	const {
-		userData,
-		newUserDetails,
-		setNewUserDetails,
-		isEdit,
-		setIsEdit,
-		newImageDisplay,
-		setNewImageDisplay,
-	} = useContext(AuthContext);
+	const { userData, isEdit, setIsEdit, newImageDisplay, setNewImageDisplay } =
+		useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
+	const [newUserDetails, setNewUserDetails] = useState<
+		Partial<User> | undefined
+	>(undefined);
 	const { updateUserDetails, imageUpload } = useAuth();
 	const newUserImageRef = useRef<HTMLInputElement>(null);
 	const [isSaving, setSaving] = useState(false);
 	const [imageLocalDisplay, setImageLocalDisplay] = useState<
 		string | ArrayBuffer | null
 	>(null);
+	const toast = useToast();
 
 	const uploadImageClick = () => {
 		newUserImageRef.current?.click();
 	};
 
-	const handleUnlock = () => {
+	const toggleEdit = () => {
 		if (isEdit) {
 			setIsEdit(false);
 		} else {
@@ -48,25 +47,44 @@ function ProfileSettings() {
 		}
 	};
 
-	const handleCancel = () => {
-		setIsEdit(false);
-	};
-
 	const onSave = async () => {
-		setSaving(true);
-		let updatedValues = { ...newUserDetails };
+		let updatedValues = { ...userData, ...newUserDetails };
+		console.log(newUserDetails, updatedValues);
 		if (newImageDisplay) {
-			setIsLoading(true);
 			const profilePicUploadURL = await imageUpload();
-			updatedValues = { ...newUserDetails, image: profilePicUploadURL };
+			updatedValues = { ...updatedValues, image: profilePicUploadURL };
+		}
+		const res = await updateUserDetails(updatedValues);
+
+		if (res?.success) {
+			setIsLoading(false);
+			setIsEdit(false);
+			setNewImageDisplay(null);
+			setNewUserDetails({ ...userData });
+			toast({
+				title: "Profile Updated",
+				status: "success",
+				duration: 2000,
+			});
 		}
 
-		await updateUserDetails(updatedValues);
-		setIsLoading(false);
-		setNewImageDisplay(null);
-		setNewUserDetails(defaultNewUser);
-		setSaving(false);
-		setIsEdit(false);
+		// setSaving(true);
+		// if (!userData) return;
+		// let updatedValues = newUserDetails ? { ...newUserDetails } : userData;
+
+		// console.log("updatedValues", updatedValues);
+		// if (newImageDisplay) {
+		// 	setIsLoading(true);
+		// 	const profilePicUploadURL = await imageUpload();
+		// 	updatedValues = { ...updatedValues, image: profilePicUploadURL };
+		// }
+
+		// await updateUserDetails(updatedValues);
+		// setIsLoading(false);
+		// setNewImageDisplay(null);
+		// setNewUserDetails(defaultNewUser);
+		// setSaving(false);
+		// toggleEdit();
 	};
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +117,7 @@ function ProfileSettings() {
 				setNewUserDetails((prev) => {
 					return {
 						...prev,
-						phonenumber: e.target.value,
+						phoneNumber: e.target.value,
 					};
 				});
 				break;
@@ -190,7 +208,7 @@ function ProfileSettings() {
 							</Heading>
 
 							{!isEdit && (
-								<Button as="a" w="150px" mb="10px" onClick={handleUnlock}>
+								<Button as="a" w="150px" mb="10px" onClick={toggleEdit}>
 									Change Profile Details
 								</Button>
 							)}
@@ -202,7 +220,7 @@ function ProfileSettings() {
 										w="150px"
 										colorScheme="red"
 										color="cyan.50"
-										onClick={handleCancel}
+										onClick={toggleEdit}
 										mb="10px"
 									>
 										Cancel
@@ -244,7 +262,9 @@ function ProfileSettings() {
 												w="60px"
 												h="30px"
 												placeholder="First Name"
-												defaultValue={userData?.firstName}
+												defaultValue={
+													newUserDetails?.firstName || userData?.firstName
+												}
 												onChange={handleInputChange}
 											/>
 										</>
@@ -271,7 +291,9 @@ function ProfileSettings() {
 											fontWeight="bold"
 											w="60px"
 											h="30px"
-											defaultValue={userData?.lastName}
+											defaultValue={
+												newUserDetails?.lastName || userData?.lastName
+											}
 											onChange={handleInputChange}
 										/>
 									) : (
@@ -295,7 +317,7 @@ function ProfileSettings() {
 											fontWeight="bold"
 											w="160px"
 											h="30px"
-											defaultValue={userData?.email}
+											defaultValue={newUserDetails?.email || userData?.email}
 											onChange={handleInputChange}
 										/>
 									) : (
@@ -318,13 +340,15 @@ function ProfileSettings() {
 											fontWeight="bold"
 											w="120px"
 											h="30px"
-											defaultValue={userData?.phonenumber}
+											defaultValue={
+												newUserDetails?.phoneNumber || userData?.phoneNumber
+											}
 											onChange={handleInputChange}
 										/>
 									) : (
 										<Box>
 											<Text fontSize="2xl" fontWeight="bold">
-												{userData?.phonenumber}
+												{userData?.phoneNumber}
 											</Text>
 										</Box>
 									)}

@@ -16,6 +16,7 @@ function useUsers() {
 		setUserData,
 		setUserPets,
 		isOwnedByUser,
+		setNewUserDetails,
 	} = useContext(AuthContext);
 	const { setPets } = useContext(PetContext);
 	const { successToast, errorToast } = CustomToast();
@@ -102,6 +103,7 @@ function useUsers() {
 			const userRes = await axios.get(`http://localhost:4000/users/${userId}`, {
 				headers: Headers,
 			});
+			setNewUserDetails(userRes.data.data);
 			setSelectedUser(userRes.data.data);
 			return userRes.data.data;
 		} catch (error) {
