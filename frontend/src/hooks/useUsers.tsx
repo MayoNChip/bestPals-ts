@@ -56,41 +56,23 @@ function useUsers() {
 		// let userPets = [];
 		console.log(isAdopted);
 		if (isAdopted?.length !== 0) {
-			// const newArray = isAdopted?.filter((petId) => petId);
-			// if (newArray?.length !== 0) {
 			setIsOwnedByUser((prev) => ({
 				...prev,
 				adopted: [...prev.adopted, petId],
 			}));
-			// } else {
-			// 	setIsOwnedByUser((prev) => ({ ...prev, adotped: false }));
-			// }
 		}
 		if (isFostered?.length !== 0) {
-			// const newArray = isFostered?.filter((petId: string) => petId);
-			// if (newArray.length !== 0) {
 			setIsOwnedByUser((cur) => ({
 				...cur,
 				fostered: [...cur.fostered, petId],
 			}));
-			// } else {
-			//   await setIsOwnedByUser((cur) => ({ ...cur, fostered: false }));
-			// }
 		}
 
 		if (isSaved?.length !== 0) {
-			// const newArray = isSaved?.filter((petId) => petId);
-			// if (newArray?.length !== 0) {
 			setIsOwnedByUser((cur) => ({
 				...cur,
 				saved: [...cur.saved, petId],
 			}));
-			// } else {
-			// 	setIsOwnedByUser((cur) => ({
-			// 		...cur,
-			// 		saved: [...cur.saved, petId],
-			// 	}));
-			// }
 		}
 	};
 
@@ -127,9 +109,6 @@ function useUsers() {
 			if (!petsResponse?.data.success) {
 				return { success: false, msg: "No pets found" };
 			}
-			// selected === "mypets"
-			// 	? setPets(petsResponse.data.data.adoptedFosteredPets)
-			// 	: setPets(petsResponse.data.data.savedPets);
 
 			switch (selected) {
 				case "mypets":
@@ -147,11 +126,6 @@ function useUsers() {
 					break;
 			}
 
-			// setAllUserPets(
-			// 	petsResponse.data.data?.adoptedFosteredPets ||
-			// 		petsResponse.data.data?.savedPets ||
-			// 		[]
-			// );
 			return { success: true, msg: petsResponse.data.data };
 		} catch (error) {
 			console.log("get pets of user error", error);
@@ -282,14 +256,6 @@ function useUsers() {
 				}
 				console.log("is owned by user", isOwnedByUser);
 				break;
-			// case "not-adopted":
-			// 	setIsOwnedByUser((prev) => {
-			// 		return {
-			// 			...prev,
-			// 			adopted: isOwnedByUser.adopted?.filter((id) => id !== petId),
-			// 			fostered: isOwnedByUser.fostered?.filter((id) => id !== petId),
-			// 		};
-			// 	});
 		}
 
 		try {

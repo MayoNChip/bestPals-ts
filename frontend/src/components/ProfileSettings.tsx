@@ -9,14 +9,13 @@ import {
 	AvatarBadge,
 	Avatar,
 	IconButton,
-	Toast,
 	useToast,
 } from "@chakra-ui/react";
 import { ChangeEvent, useContext, useRef, useState } from "react";
 import { EditIcon } from "@chakra-ui/icons";
 import banner from "../img/petBanner.jpg";
 import footerImage from "../img/petgang.png";
-import AuthContext, { User, defaultNewUser } from "../context/AuthContext";
+import AuthContext, { User } from "../context/AuthContext";
 import useAuth from "../hooks/useAuth";
 import ModalChangePassword from "./ui/ModalChangePassword";
 
@@ -48,6 +47,7 @@ function ProfileSettings() {
 	};
 
 	const onSave = async () => {
+		setSaving(true);
 		let updatedValues = { ...userData, ...newUserDetails };
 		console.log(newUserDetails, updatedValues);
 		if (newImageDisplay) {
@@ -59,6 +59,7 @@ function ProfileSettings() {
 		if (res?.success) {
 			setIsLoading(false);
 			setIsEdit(false);
+			setSaving(false);
 			setNewImageDisplay(null);
 			setNewUserDetails({ ...userData });
 			toast({
