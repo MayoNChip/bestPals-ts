@@ -7,7 +7,6 @@ import PetCard from "./PetCard";
 function PetList() {
   const { pets } = useContext(PetContext);
   const navigate = useNavigate();
-  console.log(pets);
 
   return (
     <Flex wrap="wrap">
